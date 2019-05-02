@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <style>
+        pre {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <b>Last NFC card UID:</b>
+        <pre id="lastUid"></pre>
+    </div>
+    <div>
+        <b>List all NFC card data:</b>
+        <pre id="allUid"></pre>
+    </div>
+    <script>
+        const reload = function () {
+            axios({
+                method: 'get',
+                url: '/nfc/lastuid'
+            })
+                // 回傳成功觸發 then
+                .then(res => {
+                    console.log(res)
+                    document.getElementById('lastUid').innerHTML = res.data ? `${res.data.uid}${res.data.isNewCard ? ' => new card' : ''}` : "no card";
+                })
+                // 回傳失敗觸發 catch => (除了一般的失敗外，如果狀態碼為4xx或5xx也是觸發catch)
+                .catch(err => {
+                    document.getElementById('lastUid').innerHTML = 'something worng';
+                });
+
+            axios({
+                method: 'get',
+                url: '/nfc/uid'
+            })
+                .then(res => {
+                    console.log(res)
+                    document.getElementById('allUid').innerHTML = res.data ? JSON.stringify(res.data, null, 2) : "no card list";
+                })
+                .catch(err => {
+                    document.getElementById('allUid').innerHTML = 'something worng';
+                });
+        }
+
+        reload();
+        setInterval(() => {
+            reload();
+        }, 1000);
+    </script>
+</body>
+
+</html>
