@@ -1,4 +1,4 @@
-# Android_NFC_Node.js_pratice
+# Android_NFC_Node.js
 M.S. Course - Design of IoT Product: Lab2, Android NFC development & Node.js Server
 
 
